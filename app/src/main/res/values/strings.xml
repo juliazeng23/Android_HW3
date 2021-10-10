@@ -8,4 +8,5 @@
     <string name="buttonText">switch view</string>
     <string name="locationString">#%1$s</string>
     <string name="locationButtonText">Find Location Color</string>
+    <string name="shareButtonText">Share Color</string>
 </resources>

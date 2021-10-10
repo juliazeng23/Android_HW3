@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -35,10 +34,9 @@ class hsvActivity : AppCompatActivity() {
     lateinit var switchButton : Button
     lateinit var locationButton: Button
 
-    private var color = 0
     private var hsvArr = FloatArray(3)
     private lateinit var locationClient: FusedLocationProviderClient
-    private lateinit var location: Location
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,14 +76,12 @@ class hsvActivity : AppCompatActivity() {
         }
 
         locationButton.setOnClickListener{
-            Log.d("location", getColorString(76.4735))
             locationClient = LocationServices.getFusedLocationProviderClient(this)
             if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                locationClient.lastLocation.addOnSuccessListener{location-> this.location}
+                locationClient.lastLocation.addOnSuccessListener{location-> Log.d("Tag",location.altitude.toString())}
             } else {
                 requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
             }
-            colorSquare.setBackgroundColor(Color.parseColor(getColorString(location.getLatitude())))
         }
     }
     private fun initialSetUp(sb: SeekBar, tv: TextView, color: String) {
@@ -109,8 +105,6 @@ class hsvActivity : AppCompatActivity() {
                     updateSeekBarTextView(tv, color, p1, 1000)
                 } else if(sb==seekBarValue){
                     updateSeekBarTextView(tv, color, p1, 1000)
-                } else {
-                    Log.d("seekbar textview", "err")
                 }
             }
 
@@ -128,6 +122,7 @@ class hsvActivity : AppCompatActivity() {
                 textViewHue.text = "Hue"
                 textViewSaturation.text = "Saturation"
                 textViewValue.text = "Value"
+
             }
             Configuration.ORIENTATION_PORTRAIT -> {
                 textViewHue.text = "Hue: "+(seekBarHue.progress).toString()
@@ -153,9 +148,6 @@ class hsvActivity : AppCompatActivity() {
         textViewSaturation.text = hsvArr[1].toString()
         textViewValue.text = hsvArr[2].toString()
 
-        Log.d("before Hue", hue.toString())
-        Log.d("before sat", sat.toString())
-        Log.d("before val", value.toString())
         seekBarHue.setProgress(hue.toInt())
         seekBarSaturation.setProgress((sat*1000).toInt())
         seekBarValue.setProgress((value*1000).toInt())
@@ -171,18 +163,25 @@ class hsvActivity : AppCompatActivity() {
 
         hexColorText.text = resources.getString(
             R.string.hexString,
-            Integer.toHexString(Color.red(color)).toUpperCase(),
-            Integer.toHexString(Color.blue(color)).toUpperCase(),
-            Integer.toHexString(Color.green(color)).toUpperCase()
+            Integer.toHexString(Color.red(Color.HSVToColor(hsvArr))).toUpperCase(),
+            Integer.toHexString(Color.blue(Color.HSVToColor(hsvArr))).toUpperCase(),
+            Integer.toHexString(Color.green(Color.HSVToColor(hsvArr))).toUpperCase()
         )
 
     }
     private fun getColorString(latitude : Double) : String {
-        return resources.getString(
-            R.string.locationString,
-            ((latitude % 1) * 100000).roundToInt().toString().padStart(6, '0'))
+//        return resources.getString(
+//            R.string.locationString,
+//            ((latitude % 1) * 100000).roundToInt().toString().padStart(6, '0')
+
+        return "lol"
+
+    }
+
+    fun test(){
 
 
     }
+
 
 }

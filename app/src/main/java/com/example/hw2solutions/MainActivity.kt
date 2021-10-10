@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var colorSquare : View
     lateinit var hexColorText : TextView
     lateinit var switchActivityButton : Button
+    lateinit var shareButton : Button
 
     private val hsvArr = FloatArray(3)
 
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         textViewBlue = findViewById(R.id.textViewBlue)
         colorSquare = findViewById(R.id.color_square)
         hexColorText = findViewById(R.id.textViewHexColor)
-
+        shareButton = findViewById(R.id.shareButton)
         switchActivityButton = findViewById(R.id.switchButton)
 
         setUpSeekbar(seekBarRed, textViewRed, resources.getString(R.string.red))
@@ -61,6 +62,21 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
 
+        }
+
+        shareButton.setOnClickListener{
+            var sendIntent = Intent()
+            sendIntent.setAction(Intent.ACTION_SEND)
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out this color: "+resources.getString(
+                R.string.hexString,
+                Integer.toHexString(seekBarRed.progress).toUpperCase(),
+                Integer.toHexString(seekBarGreen.progress).toUpperCase(),
+                Integer.toHexString(seekBarBlue.progress).toUpperCase()
+            ))
+            sendIntent.setType("text/plain")
+            if (sendIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(sendIntent)
+            }
         }
     }
 
@@ -129,9 +145,6 @@ class MainActivity : AppCompatActivity() {
         textViewGreen.text = green.toString()
         textViewBlue.text = blue.toString()
 
-        Log.d("before Red", red.toString())
-        Log.d("before Green", green.toString())
-        Log.d("before Blue", blue.toString())
         seekBarRed.progress = red
         seekBarGreen.progress = green
         seekBarBlue.progress = blue
