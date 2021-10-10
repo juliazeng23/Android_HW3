@@ -1,13 +1,16 @@
 package com.example.hw2solutions
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.random.Random
+import android.util.Log
 
 class MainActivity : AppCompatActivity() {
     private val max = 255
@@ -20,6 +23,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var textViewGreen: TextView
     lateinit var colorSquare : View
     lateinit var hexColorText : TextView
+    lateinit var switchActivityButton : Button
+
+    private val hsvArr = FloatArray(3)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +41,27 @@ class MainActivity : AppCompatActivity() {
         colorSquare = findViewById(R.id.color_square)
         hexColorText = findViewById(R.id.textViewHexColor)
 
+        switchActivityButton = findViewById(R.id.switchButton)
+
         setUpSeekbar(seekBarRed, textViewRed, resources.getString(R.string.red))
         setUpSeekbar(seekBarGreen, textViewGreen, resources.getString(R.string.green))
         setUpSeekbar(seekBarBlue, textViewBlue, resources.getString(R.string.blue))
 
         // Initialize the square's color on onCreate()
         regenerateColor()
+
+        switchActivityButton.setOnClickListener{
+            val intent = Intent(this, hsvActivity::class.java)
+            Color.RGBToHSV(seekBarRed.progress,seekBarGreen.progress,seekBarBlue.progress,hsvArr)
+            intent.putExtra("Hue",hsvArr[0])
+            intent.putExtra("Saturation", hsvArr[1])
+            intent.putExtra("Value", hsvArr[2])
+            intent.type = "text/plain"
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
+            }
+
+        }
     }
 
     private fun initialSetUp(sb: SeekBar, tv: TextView, color: String) {
@@ -87,13 +108,37 @@ class MainActivity : AppCompatActivity() {
         colorSquare.setBackgroundColor(
             Color.rgb(seekBarRed.progress, seekBarGreen.progress, seekBarBlue.progress)
         )
-
         hexColorText.text = resources.getString(
             R.string.hexString,
             Integer.toHexString(seekBarRed.progress).toUpperCase(),
             Integer.toHexString(seekBarGreen.progress).toUpperCase(),
             Integer.toHexString(seekBarBlue.progress).toUpperCase()
         )
+    }
+
+    override fun onResume(){
+        super.onResume()
+        var red = 0
+        var green = 0
+        var blue = 0
+        red = intent.extras?.getInt("red") ?: 0
+        green = intent.extras?.getInt("green") ?: 0
+        blue = intent.extras?.getInt("blue") ?: 0
+
+        textViewRed.text = red.toString()
+        textViewGreen.text = green.toString()
+        textViewBlue.text = blue.toString()
+
+        Log.d("before Red", red.toString())
+        Log.d("before Green", green.toString())
+        Log.d("before Blue", blue.toString())
+        seekBarRed.progress = red
+        seekBarGreen.progress = green
+        seekBarBlue.progress = blue
+        Log.d("after Red", seekBarRed.progress.toString())
+        Log.d("after Green", seekBarGreen.progress.toString())
+        Log.d("after Blue", seekBarBlue.progress.toString())
 
     }
+
 }
