@@ -68,6 +68,7 @@ class hsvActivity : AppCompatActivity() {
 
         locationButton.setOnClickListener{
             Log.d("location", getColorString(76.4735))
+            colorSquare.setBackgroundColor(Color.parseColor(getColorString(76.4735)))
         }
     }
     private fun initialSetUp(sb: SeekBar, tv: TextView, color: String) {
