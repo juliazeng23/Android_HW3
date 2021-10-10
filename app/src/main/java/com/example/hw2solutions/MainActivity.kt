@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         switchActivityButton.setOnClickListener{
             val intent = Intent(this, hsvActivity::class.java)
-            Color.RGBToHSV(seekBarRed.progress,seekBarGreen.progress,seekBarBlue.progress,hsvArr)
+            Color.colorToHSV(Color.rgb(seekBarRed.progress,seekBarGreen.progress,seekBarBlue.progress),hsvArr)
             intent.putExtra("Hue",hsvArr[0])
             intent.putExtra("Saturation", hsvArr[1])
             intent.putExtra("Value", hsvArr[2])

@@ -40,8 +40,6 @@ class hsvActivity : AppCompatActivity() {
     private lateinit var locationClient: FusedLocationProviderClient
     private var latitude = 0.0
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -81,11 +79,11 @@ class hsvActivity : AppCompatActivity() {
         locationButton.setOnClickListener{
             locationClient = LocationServices.getFusedLocationProviderClient(this)
             if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                locationClient.lastLocation.addOnSuccessListener{location-> this.latitude = location.latitude}
-                var red = (latitude/10000).toInt()
-                var green = ((latitude/10)%100).toInt()
-                var blue = (latitude%100).toInt()
-                Color.RGBToHSV(red,blue,green,hsvArr)
+                locationClient.lastLocation.addOnSuccessListener{location->
+                    this.latitude = location.latitude
+                }
+                var newColor = Color.parseColor(getColorString(latitude))
+                Color.RGBToHSV(Color.red(newColor),Color.green(newColor),Color.blue(newColor),hsvArr)
                 var hue = hsvArr[0]
                 var sat = hsvArr[1]
                 var value = hsvArr[2]
@@ -176,8 +174,8 @@ class hsvActivity : AppCompatActivity() {
         hexColorText.text = resources.getString(
             R.string.hexString,
             Integer.toHexString(Color.red(Color.HSVToColor(hsvArr))).toUpperCase(),
-            Integer.toHexString(Color.blue(Color.HSVToColor(hsvArr))).toUpperCase(),
-            Integer.toHexString(Color.green(Color.HSVToColor(hsvArr))).toUpperCase()
+            Integer.toHexString(Color.green(Color.HSVToColor(hsvArr))).toUpperCase(),
+            Integer.toHexString(Color.blue(Color.HSVToColor(hsvArr))).toUpperCase()
         )
 
     }
