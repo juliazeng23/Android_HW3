@@ -84,23 +84,32 @@
 
     <Button
         android:id="@+id/switchButton"
-        android:text="@string/buttonText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/buttonText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarBlue" />
+        app:layout_constraintTop_toBottomOf="@+id/seekBarRed" />
 
     <Button
         android:id="@+id/locationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/locationButtonText"
+        android:visibility="invisible"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/shareButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarRed" />
+        app:layout_constraintEnd_toEndOf="@+id/switchButton"
+        app:layout_constraintStart_toStartOf="@+id/switchButton"
+        app:layout_constraintTop_toBottomOf="@+id/switchButton"
+        android:text="@string/shareButtonText"/>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
