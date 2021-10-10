@@ -135,10 +135,6 @@ class MainActivity : AppCompatActivity() {
         seekBarRed.progress = red
         seekBarGreen.progress = green
         seekBarBlue.progress = blue
-        Log.d("after Red", seekBarRed.progress.toString())
-        Log.d("after Green", seekBarGreen.progress.toString())
-        Log.d("after Blue", seekBarBlue.progress.toString())
-
     }
 
 }

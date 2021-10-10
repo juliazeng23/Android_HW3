@@ -1,6 +1,8 @@
 package com.example.hw2solutions
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
@@ -10,8 +12,13 @@ import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import kotlin.math.roundToInt
 import kotlin.random.Random
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.material.snackbar.Snackbar
+
 
 class hsvActivity : AppCompatActivity() {
 
@@ -29,6 +36,8 @@ class hsvActivity : AppCompatActivity() {
 
     private var color = 0
     private var hsvArr = FloatArray(3)
+    private lateinit var locationClient: FusedLocationProviderClient
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,9 +66,10 @@ class hsvActivity : AppCompatActivity() {
 
         switchButton.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("red",Color.red(Color.HSVToColor(1,hsvArr)))
-            intent.putExtra("blue",Color.blue(Color.HSVToColor(1,hsvArr)))
-            intent.putExtra("green",Color.red(Color.HSVToColor(1,hsvArr)))
+            intent.putExtra("red",Color.red(Color.HSVToColor(hsvArr)))
+            intent.putExtra("blue",Color.blue(Color.HSVToColor(hsvArr)))
+            intent.putExtra("green",Color.green(Color.HSVToColor(hsvArr)))
+
             intent.type = "text/plain"
             if (intent.resolveActivity(packageManager) != null) {
                 startActivity(intent)
@@ -141,10 +151,6 @@ class hsvActivity : AppCompatActivity() {
         seekBarHue.setProgress(hue.toInt())
         seekBarSaturation.setProgress((sat*1000).toInt())
         seekBarValue.setProgress((value*1000).toInt())
-        Log.d("after Hue", seekBarHue.progress.toString())
-        Log.d("after Sat", seekBarSaturation.progress.toString())
-        Log.d("after Val", seekBarValue.progress.toString())
-
     }
 
     // Regenerates the color of the color square.
@@ -153,7 +159,6 @@ class hsvActivity : AppCompatActivity() {
         hsvArr[1] = (seekBarSaturation.progress+0f)/1000f
         hsvArr[2] = (seekBarValue.progress+0f)/1000f
 
-        color = Color.rgb(Color.red(Color.HSVToColor(1,hsvArr)),Color.blue(Color.HSVToColor(1,hsvArr)),Color.green(Color.HSVToColor(1,hsvArr)))
         colorSquare.setBackgroundColor(Color.HSVToColor(hsvArr))
 
         hexColorText.text = resources.getString(
@@ -165,9 +170,23 @@ class hsvActivity : AppCompatActivity() {
 
     }
     private fun getColorString(latitude : Double) : String {
-        return resources.getString(
-            R.string.locationString,
-            ((latitude % 1) * 100000).roundToInt().toString().padStart(6, '0')
-        )
+//        return resources.getString(
+//            R.string.locationString,
+//            ((latitude % 1) * 100000).roundToInt().toString().padStart(6, '0')
+
+        return "lol"
+
     }
+
+    fun test(){
+        locationClient = LocationServices.getFusedLocationProviderClient(this)
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            locationClient.lastLocation.addOnSuccessListener{location-> Log.d("Tag",location.altitude.toString())}
+        } else {
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+        }
+        
+
+    }
+
 }
