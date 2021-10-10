@@ -91,14 +91,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/seekBarBlue"
         app:layout_constraintStart_toStartOf="@+id/seekBarBlue"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarBlue" />
+        app:layout_constraintTop_toBottomOf="@+id/seekBarGreen" />
 
     <Button
         android:id="@+id/locationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        tools:ignore="MissingConstraints" />
+        android:text="@string/locationButtonText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/color_square"
+        app:layout_constraintTop_toBottomOf="@+id/switchButton"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/shareButton"
@@ -108,6 +112,7 @@
         app:layout_constraintEnd_toEndOf="@+id/switchButton"
         app:layout_constraintStart_toStartOf="@+id/switchButton"
         app:layout_constraintTop_toBottomOf="@+id/switchButton"
-        android:text="@string/shareButtonText"/>
+        android:text="@string/shareButtonText"
+        android:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,8 @@ import kotlin.random.Random
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_hsv.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class hsvActivity : AppCompatActivity() {
@@ -36,6 +38,7 @@ class hsvActivity : AppCompatActivity() {
 
     private var hsvArr = FloatArray(3)
     private lateinit var locationClient: FusedLocationProviderClient
+    private var latitude = 0
 
 
 
@@ -122,7 +125,6 @@ class hsvActivity : AppCompatActivity() {
                 textViewHue.text = "Hue"
                 textViewSaturation.text = "Saturation"
                 textViewValue.text = "Value"
-
             }
             Configuration.ORIENTATION_PORTRAIT -> {
                 textViewHue.text = "Hue: "+(seekBarHue.progress).toString()
@@ -151,6 +153,10 @@ class hsvActivity : AppCompatActivity() {
         seekBarHue.setProgress(hue.toInt())
         seekBarSaturation.setProgress((sat*1000).toInt())
         seekBarValue.setProgress((value*1000).toInt())
+
+        shareButton.visibility = View.INVISIBLE
+        locationButton.visibility = View.VISIBLE
+
     }
 
     // Regenerates the color of the color square.
@@ -170,18 +176,9 @@ class hsvActivity : AppCompatActivity() {
 
     }
     private fun getColorString(latitude : Double) : String {
-//        return resources.getString(
-//            R.string.locationString,
-//            ((latitude % 1) * 100000).roundToInt().toString().padStart(6, '0')
-
-        return "lol"
-
+        return resources.getString(
+            R.string.locationString,
+            ((latitude % 1) * 100000).roundToInt().toString().padStart(6, '0'))
     }
-
-    fun test(){
-
-
-    }
-
 
 }
