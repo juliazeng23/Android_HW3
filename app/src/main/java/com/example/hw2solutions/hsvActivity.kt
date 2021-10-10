@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -39,6 +40,7 @@ class hsvActivity : AppCompatActivity() {
     private var hsvArr = FloatArray(3)
     private lateinit var locationClient: FusedLocationProviderClient
     private var latitude = 0
+    private lateinit var loc: Location
 
 
 
@@ -81,10 +83,18 @@ class hsvActivity : AppCompatActivity() {
         locationButton.setOnClickListener{
             locationClient = LocationServices.getFusedLocationProviderClient(this)
             if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                locationClient.lastLocation.addOnSuccessListener{location-> Log.d("Tag",location.altitude.toString())}
+                locationClient.lastLocation.addOnSuccessListener{location-> this.loc = location}
+                colorSquare.setBackgroundColor(Color.parseColor(getColorString(loc.getLatitude())))
+
             } else {
                 requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                val snackBar = Snackbar.make(locationButton, "Location permissions are not granted", Snackbar.LENGTH_LONG)
+                snackBar.show()
+                snackBar.setAction("RETRY") {
+                }
             }
+
+//            colorSquare.setBackgroundColor(Color.parseColor(getColorString(loc.getLatitude())))
         }
     }
     private fun initialSetUp(sb: SeekBar, tv: TextView, color: String) {
