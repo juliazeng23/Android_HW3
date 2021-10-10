@@ -100,6 +100,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/seekBarValue"
         app:layout_constraintStart_toStartOf="@+id/seekBarValue"
-        app:layout_constraintTop_toTopOf="@+id/seekBarSaturation" />
+        app:layout_constraintTop_toTopOf="@+id/seekBarSaturation"
+        android:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

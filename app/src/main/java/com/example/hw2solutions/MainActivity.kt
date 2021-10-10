@@ -11,6 +11,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.random.Random
 import android.util.Log
+import kotlinx.android.synthetic.main.activity_hsv.*
+import kotlinx.android.synthetic.main.activity_hsv.locationButton
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private val max = 255
@@ -140,6 +143,9 @@ class MainActivity : AppCompatActivity() {
         red = intent.extras?.getInt("red") ?: 0
         green = intent.extras?.getInt("green") ?: 0
         blue = intent.extras?.getInt("blue") ?: 0
+
+        locationButton.visibility = View.INVISIBLE
+        shareButton.visibility = View.VISIBLE
 
         textViewRed.text = red.toString()
         textViewGreen.text = green.toString()
