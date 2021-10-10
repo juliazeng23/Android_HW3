@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -37,7 +38,7 @@ class hsvActivity : AppCompatActivity() {
     private var color = 0
     private var hsvArr = FloatArray(3)
     private lateinit var locationClient: FusedLocationProviderClient
-
+    private lateinit var location: Location
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +79,13 @@ class hsvActivity : AppCompatActivity() {
 
         locationButton.setOnClickListener{
             Log.d("location", getColorString(76.4735))
-            colorSquare.setBackgroundColor(Color.parseColor(getColorString(76.4735)))
+            locationClient = LocationServices.getFusedLocationProviderClient(this)
+            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                locationClient.lastLocation.addOnSuccessListener{location-> this.location}
+            } else {
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+            }
+            colorSquare.setBackgroundColor(Color.parseColor(getColorString(location.getLatitude())))
         }
     }
     private fun initialSetUp(sb: SeekBar, tv: TextView, color: String) {
@@ -171,22 +178,10 @@ class hsvActivity : AppCompatActivity() {
 
     }
     private fun getColorString(latitude : Double) : String {
-//        return resources.getString(
-//            R.string.locationString,
-//            ((latitude % 1) * 100000).roundToInt().toString().padStart(6, '0')
+        return resources.getString(
+            R.string.locationString,
+            ((latitude % 1) * 100000).roundToInt().toString().padStart(6, '0'))
 
-        return "lol"
-
-    }
-
-    fun test(){
-        locationClient = LocationServices.getFusedLocationProviderClient(this)
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            locationClient.lastLocation.addOnSuccessListener{location-> Log.d("Tag",location.altitude.toString())}
-        } else {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
-        }
-        
 
     }
 
