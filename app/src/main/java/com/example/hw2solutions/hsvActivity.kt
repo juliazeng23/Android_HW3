@@ -144,10 +144,9 @@ class hsvActivity : AppCompatActivity() {
         hsvArr[0] = seekBarHue.progress+0f
         hsvArr[1] = (seekBarSaturation.progress+0f)/1000f
         hsvArr[2] = (seekBarValue.progress+0f)/1000f
+
         color = Color.rgb(Color.red(Color.HSVToColor(1,hsvArr)),Color.blue(Color.HSVToColor(1,hsvArr)),Color.green(Color.HSVToColor(1,hsvArr)))
-        colorSquare.setBackgroundColor(
-            color
-        )
+        colorSquare.setBackgroundColor(Color.HSVToColor(hsvArr))
 
         hexColorText.text = resources.getString(
             R.string.hexString,
