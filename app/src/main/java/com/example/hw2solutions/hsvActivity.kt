@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class hsvActivity : AppCompatActivity() {
@@ -24,9 +25,11 @@ class hsvActivity : AppCompatActivity() {
     lateinit var colorSquare : View
     lateinit var hexColorText : TextView
     lateinit var switchButton : Button
+    lateinit var locationButton: Button
 
     private var color = 0
     private var hsvArr = FloatArray(3)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +46,7 @@ class hsvActivity : AppCompatActivity() {
         hexColorText = findViewById(R.id.textViewHexColor)
 
         switchButton = findViewById(R.id.switchButton)
+        locationButton = findViewById(R.id.locationButton)
 
         setUpSeekbar(seekBarHue, textViewHue, resources.getString(R.string.red), 360)
         setUpSeekbar(seekBarSaturation, textViewSaturation, resources.getString(R.string.green),1000)
@@ -60,6 +64,10 @@ class hsvActivity : AppCompatActivity() {
             if (intent.resolveActivity(packageManager) != null) {
                 startActivity(intent)
             }
+        }
+
+        locationButton.setOnClickListener{
+            Log.d("location", getColorString(76.4735))
         }
     }
     private fun initialSetUp(sb: SeekBar, tv: TextView, color: String) {
@@ -155,5 +163,11 @@ class hsvActivity : AppCompatActivity() {
             Integer.toHexString(Color.green(color)).toUpperCase()
         )
 
+    }
+    private fun getColorString(latitude : Double) : String {
+        return resources.getString(
+            R.string.locationString,
+            ((latitude % 1) * 100000).roundToInt().toString().padStart(6, '0')
+        )
     }
 }

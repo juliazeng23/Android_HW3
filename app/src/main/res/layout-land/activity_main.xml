@@ -93,4 +93,14 @@
         app:layout_constraintStart_toStartOf="@+id/seekBarBlue"
         app:layout_constraintTop_toBottomOf="@+id/seekBarBlue" />
 
+    <Button
+        android:id="@+id/locationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/locationButtonText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/seekBarBlue"
+        app:layout_constraintStart_toStartOf="@+id/seekBarBlue"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarRed" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
