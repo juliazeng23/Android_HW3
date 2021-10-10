@@ -147,10 +147,6 @@ class MainActivity : AppCompatActivity() {
         locationButton.visibility = View.INVISIBLE
         shareButton.visibility = View.VISIBLE
 
-        textViewRed.text = red.toString()
-        textViewGreen.text = green.toString()
-        textViewBlue.text = blue.toString()
-
         seekBarRed.progress = red
         seekBarGreen.progress = green
         seekBarBlue.progress = blue

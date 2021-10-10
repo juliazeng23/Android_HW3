@@ -38,7 +38,7 @@ class hsvActivity : AppCompatActivity() {
 
     private var hsvArr = FloatArray(3)
     private lateinit var locationClient: FusedLocationProviderClient
-    private var latitude = 0
+    private var latitude = 0.0
 
 
 
@@ -81,7 +81,17 @@ class hsvActivity : AppCompatActivity() {
         locationButton.setOnClickListener{
             locationClient = LocationServices.getFusedLocationProviderClient(this)
             if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                locationClient.lastLocation.addOnSuccessListener{location-> Log.d("Tag",location.altitude.toString())}
+                locationClient.lastLocation.addOnSuccessListener{location-> this.latitude = location.latitude}
+                var red = (latitude/10000).toInt()
+                var green = ((latitude/10)%100).toInt()
+                var blue = (latitude%100).toInt()
+                Color.RGBToHSV(red,blue,green,hsvArr)
+                var hue = hsvArr[0]
+                var sat = hsvArr[1]
+                var value = hsvArr[2]
+                seekBarHue.progress = hue.toInt()
+                seekBarSaturation.progress = (sat*1000).toInt()
+                seekBarValue.progress = (value*1000).toInt()
             } else {
                 requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
             }
@@ -146,13 +156,9 @@ class hsvActivity : AppCompatActivity() {
         hsvArr[1]=sat
         hsvArr[2]=value
 
-        textViewHue.text = hsvArr[0].toString()
-        textViewSaturation.text = hsvArr[1].toString()
-        textViewValue.text = hsvArr[2].toString()
-
-        seekBarHue.setProgress(hue.toInt())
-        seekBarSaturation.setProgress((sat*1000).toInt())
-        seekBarValue.setProgress((value*1000).toInt())
+        seekBarHue.progress = hue.toInt()
+        seekBarSaturation.progress = (sat*1000).toInt()
+        seekBarValue.progress = (value*1000).toInt()
 
         shareButton.visibility = View.INVISIBLE
         locationButton.visibility = View.VISIBLE
