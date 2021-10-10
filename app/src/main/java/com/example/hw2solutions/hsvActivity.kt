@@ -1,0 +1,160 @@
+package com.example.hw2solutions
+
+import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Color
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.SeekBar
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import kotlin.random.Random
+
+class hsvActivity : AppCompatActivity() {
+
+
+    lateinit var seekBarHue : SeekBar
+    lateinit var seekBarSaturation : SeekBar
+    lateinit var seekBarValue: SeekBar
+    lateinit var textViewHue: TextView
+    lateinit var textViewSaturation: TextView
+    lateinit var textViewValue: TextView
+    lateinit var colorSquare : View
+    lateinit var hexColorText : TextView
+    lateinit var switchButton : Button
+
+    private var color = 0
+    private var hsvArr = FloatArray(3)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Initialize the UI components
+        seekBarHue = findViewById(R.id.seekBarRed)
+        seekBarSaturation = findViewById(R.id.seekBarGreen)
+        seekBarValue = findViewById(R.id.seekBarBlue)
+        textViewHue = findViewById(R.id.textViewRed)
+        textViewSaturation = findViewById(R.id.textViewGreen)
+        textViewValue = findViewById(R.id.textViewBlue)
+        colorSquare = findViewById(R.id.color_square)
+        hexColorText = findViewById(R.id.textViewHexColor)
+
+        switchButton = findViewById(R.id.switchButton)
+
+        setUpSeekbar(seekBarHue, textViewHue, resources.getString(R.string.red), 360)
+        setUpSeekbar(seekBarSaturation, textViewSaturation, resources.getString(R.string.green),1000)
+        setUpSeekbar(seekBarValue, textViewValue, resources.getString(R.string.blue),1000)
+
+        // Initialize the square's color on onCreate()
+        regenerateColor()
+
+        switchButton.setOnClickListener{
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("red",Color.red(Color.HSVToColor(1,hsvArr)))
+            intent.putExtra("blue",Color.blue(Color.HSVToColor(1,hsvArr)))
+            intent.putExtra("green",Color.red(Color.HSVToColor(1,hsvArr)))
+            intent.type = "text/plain"
+            if (intent.resolveActivity(packageManager) != null) {
+                startActivity(intent)
+            }
+        }
+    }
+    private fun initialSetUp(sb: SeekBar, tv: TextView, color: String) {
+        // Set initial color to random number
+        tv.text = resources.getString(R.string.seekbarLabel, color, 0)
+    }
+
+    private fun setUpSeekbar(sb: SeekBar, tv: TextView, color : String, max : Int) {
+        // Set the max value of seekbar to max hexcode - 255
+        sb.max = max
+        initialSetUp(sb, tv, color)
+
+        sb.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                regenerateColor()
+
+                // Set TextView based on orientation
+                if(sb==seekBarHue){
+                    updateSeekBarTextView(tv, color, p1,1)
+                } else if (sb==seekBarSaturation) {
+                    updateSeekBarTextView(tv, color, p1, 1000)
+                } else if(sb==seekBarValue){
+                    updateSeekBarTextView(tv, color, p1, 1000)
+                } else {
+                    Log.d("seekbar textview", "err")
+                }
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {}
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {}
+
+        })
+    }
+
+    // Modifies text label next to SeekBar depending on device orientation
+    private fun updateSeekBarTextView(tv: TextView, color: String, progress: Int, modifier: Int) {
+        when (resources.configuration.orientation) {
+            Configuration.ORIENTATION_LANDSCAPE -> {
+                textViewHue.text = "Hue"
+                textViewSaturation.text = "Saturation"
+                textViewValue.text = "Value"
+            }
+            Configuration.ORIENTATION_PORTRAIT -> {
+                textViewHue.text = "Hue: "+(seekBarHue.progress).toString()
+                textViewSaturation.text = "Saturation: "+((seekBarSaturation.progress+0f)/1000f).toString()
+                textViewValue.text = "Value: "+((seekBarValue.progress+0f)/1000f).toString()
+            }
+        }
+    }
+
+    override fun onResume(){
+        super.onResume()
+        var hue = 0f
+        var sat = 0f
+        var value = 0f
+        hue = intent.extras?.getFloat("Hue") ?: 0f
+        sat = intent.extras?.getFloat("Saturation") ?: 0f
+        value = intent.extras?.getFloat("Value") ?: 0f
+        hsvArr[0]=hue
+        hsvArr[1]=sat
+        hsvArr[2]=value
+
+        textViewHue.text = hsvArr[0].toString()
+        textViewSaturation.text = hsvArr[1].toString()
+        textViewValue.text = hsvArr[2].toString()
+
+        Log.d("before Hue", hue.toString())
+        Log.d("before sat", sat.toString())
+        Log.d("before val", value.toString())
+        seekBarHue.setProgress(hue.toInt())
+        seekBarSaturation.setProgress((sat*1000).toInt())
+        seekBarValue.setProgress((value*1000).toInt())
+        Log.d("after Hue", seekBarHue.progress.toString())
+        Log.d("after Sat", seekBarSaturation.progress.toString())
+        Log.d("after Val", seekBarValue.progress.toString())
+
+    }
+
+    // Regenerates the color of the color square.
+    private fun regenerateColor() {
+        hsvArr[0] = seekBarHue.progress+0f
+        hsvArr[1] = (seekBarSaturation.progress+0f)/1000f
+        hsvArr[2] = (seekBarValue.progress+0f)/1000f
+        color = Color.rgb(Color.red(Color.HSVToColor(1,hsvArr)),Color.blue(Color.HSVToColor(1,hsvArr)),Color.green(Color.HSVToColor(1,hsvArr)))
+        colorSquare.setBackgroundColor(
+            color
+        )
+
+        hexColorText.text = resources.getString(
+            R.string.hexString,
+            Integer.toHexString(Color.red(color)).toUpperCase(),
+            Integer.toHexString(Color.blue(color)).toUpperCase(),
+            Integer.toHexString(Color.green(color)).toUpperCase()
+        )
+
+    }
+}

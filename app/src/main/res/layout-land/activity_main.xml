@@ -83,4 +83,14 @@
         app:layout_constraintStart_toEndOf="@+id/seekBarBlue"
         app:layout_constraintTop_toTopOf="@+id/seekBarBlue" />
 
+    <Button
+        android:id="@+id/switchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/seekBarBlue"
+        app:layout_constraintStart_toStartOf="@+id/seekBarBlue"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarBlue" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
