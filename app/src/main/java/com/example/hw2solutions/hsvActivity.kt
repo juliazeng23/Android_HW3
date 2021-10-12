@@ -93,6 +93,8 @@ class hsvActivity : AppCompatActivity() {
                 seekBarSaturation.progress = (sat*1000).toInt()
                 seekBarValue.progress = (value*1000).toInt()
             } else {
+                val snackbar = Snackbar.make(locationButton, "Location permissions are not granted", Snackbar.LENGTH_LONG)
+                snackbar.show()
                 requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
             }
         }
