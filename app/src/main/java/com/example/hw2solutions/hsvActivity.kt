@@ -89,13 +89,16 @@ class hsvActivity : AppCompatActivity() {
                 var hue = hsvArr[0]
                 var sat = hsvArr[1]
                 var value = hsvArr[2]
+                colorSquare.setBackgroundColor(Color.parseColor(getColorString(latitude)))
                 seekBarHue.progress = hue.toInt()
                 seekBarSaturation.progress = (sat*1000).toInt()
                 seekBarValue.progress = (value*1000).toInt()
             } else {
                 val snackbar = Snackbar.make(locationButton, "Location permissions are not granted", Snackbar.LENGTH_LONG)
                 snackbar.show()
-                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                snackbar.setAction("RETRY") {
+                    requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                }
             }
         }
     }
